@@ -20,10 +20,10 @@ module.exports = {
     getGameScore: function (req, res) {
 
         //TODO, virheenhallinta, useammat parametrit jne...
-        db_controller.getGameScore(req.params.game, (virhe, vastaus) => {
+        db_controller.getGameScore(req.params.game_id, (virhe, vastaus) => {
 
             if (virhe) {
-                res.status(500).json(virhe);
+                res.status(500).json("Tapahtui virhe haettaessa pelin pisteitä: " + virhe);
             } else {
 
                 vastaus.sort(function (a, b) {
@@ -35,14 +35,14 @@ module.exports = {
         })
     },
 
-    //Hakee tietyn pelaajan kaikkien pelien pisteet, järjestää parhaimman mukaan.
+    //Hakee tietyn pelaajan kaikkien pelien pisteet käyttäjänimen perusteella, järjestää parhaimman mukaan.
     getPlayerScore: function (req, res) {
 
         //TODO, virheenhallinta, useammat parametrit jne...
         db_controller.getPlayerScore(req.params.playername, (virhe, vastaus) => {
 
             if (virhe) {
-                res.status(500).json(virhe);
+                res.status(500).json("Tapahtui virhe haettaessa pelaajan:" + req.params.playername + "pisteitä. Yritä hetken kuluttua uudelleen. Virhe:" + +virhe);
             } else {
 
                 vastaus.sort(function (a, b) {
@@ -55,22 +55,33 @@ module.exports = {
     },
 
     //Lisää tietyn pelaajan pisteet kantaan
+    /*
+    INPUT:
+    {
+        "game_id":(Games kannan object_id)
+        "player": (pelaajan nimi),
+        "score": (pelaajan pisteet kyseisessä pelissä),
+        "gametoken":(autentikointitoken, jotta kuka tahansa ei voi puskea dataa kantaan)
+    }
+    */
     addPlayerScore: function (req, res) {
 
         let pisteet = {
-            "game": req.body.game,
+            "game_id": req.body.game_id,
             "player": req.body.player,
             "score": req.body.score,
-            "gametoken": req.body.gametoken, //TODO
+            "gametoken": req.body.gametoken, 
             "timestamp": moment().format("x")
         };
+
+        
 
         db_controller.postPlayerScore(pisteet, (virhe, vastaus) => {
 
             if (virhe) {
-                res.status(500).json(virhe);
+                res.status(500).json("Tapahtui virhe lisättäessä pisteitä: " + virhe);
             } else {
-                res.status(200).json(vastaus);
+                res.status(200).json("Pisteet lisätty onnistuneesti");
             }
         })
     }
