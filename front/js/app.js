@@ -1,9 +1,10 @@
 var main = angular.module("main", []);
 
-var apiUrl = "http://172.20.41.32:3333/api/";
+// var apiUrl = "http://172.20.41.32:3333/api/";
+var apiUrl = "http://localhost:3333/api/";
 
 main.controller("mainController", function ($scope, $http, $interval, $timeout, testService, mockdataService, db_service) {
-    console.log("main!")
+    console.log("main!");
 
     //Debuggausta varten, testaa vastaako palvelin pyyntöihin
     testService.tarkistaPalvelimenTila().then(function (tila) {
@@ -15,7 +16,7 @@ main.controller("mainController", function ($scope, $http, $interval, $timeout, 
 
 
     $scope.mockPeli = {
-        "peli_nimi":"Testipeli",
+        "peli_nimi":"Testipeli"
     };
 
     
@@ -27,7 +28,7 @@ main.controller("mainController", function ($scope, $http, $interval, $timeout, 
             $scope.mockPisteet = vastaus;
         });
 
-    }
+    };
 
     //Hakee scoresin sisällön
     $scope.haeKaikkienPelienPisteet = function () {
@@ -35,23 +36,23 @@ main.controller("mainController", function ($scope, $http, $interval, $timeout, 
             $scope.viesti = vastaus;
             $scope.kaikkipisteet = vastaus;
         });
-    }
+    };
 
     //Lähettää pistedataa scoresiin
     $scope.lahetaPisteet = function(pistedata){
         db_service.lahetaPisteet(pistedata).then(function(vastaus){
             $scope.viesti = vastaus;
 
-        })
-    }
+        });
+    };
 
     //Lähettää pelin gamesiin
     $scope.lahetaPeli = function(pelidata){
 
         db_service.uusiPeli(pelidata).then(function(vastaus){
             $scope.viesti = vastaus;
-        })
-    }
+        });
+    };
 
 
 

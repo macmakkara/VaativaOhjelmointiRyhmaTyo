@@ -6,11 +6,11 @@ const moment = require("moment");
 
 const routes = require('./routes/routes'); //Sisältää kaikki urlit
 const db_controller = require("./controllers/db_controller");
-const config_server = require("./configs/server")
+const config_server = require("./configs/server");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("./public"));
+app.use(express.static("./front"));
 app.locals.pretty = true;
 
 

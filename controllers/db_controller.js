@@ -10,10 +10,12 @@ let db_url = "mongodb://localhost:27017/gamescore"; //Pitäisi varmaan siirtää
 let db;
 
 mongoClient.connect(db_url, (err, yhteys) => {
-    console.log(err);
+    if (err) {
+        console.log(err);
+    } else {
     console.log(yhteys);
     console.log("Yhteys tietokantapalvelimeen luotu");
-
+    }
     db = yhteys;
 });
 
@@ -22,10 +24,19 @@ module.exports = {
 
     getAllScores: (callback) => {
 
-        db.collection("scores").find().toArray((virhe, rivit) => {
+        db.collection("scores").aggregate([ 
+            {
+                $lookup:
+                        { 
+                          from: "games",
+                          localField:"gametoken",
+                          foreignField:"gametoken",
+                          as:"game"
+                        }
+            }]).toArray((virhe, rivit) => {
 
             if (virhe) throw virhe;
-
+            console.log(rivit);
             callback(virhe, rivit);
 
         });
@@ -70,7 +81,7 @@ module.exports = {
             if (virhe) throw virhe;
 
             callback(virhe, rivit);
-        })
+        });
     },
 
 
@@ -78,7 +89,7 @@ module.exports = {
 
         db.collection("games").find({ "peli_nimi": gamename }).toArray((virhe, rivit) => {
             if (virhe) throw virhe;
-            callback(virhe, rivit)
+            callback(virhe, rivit);
         });
 
     },
@@ -88,7 +99,7 @@ module.exports = {
 
         db.collection("games").find({ "_id": id },{"gametoken":0 }).toArray((virhe, rivit) => {
             if (virhe) throw virhe;
-            callback(virhe, rivit)
+            callback(virhe, rivit);
         });
 
     },
@@ -115,4 +126,4 @@ module.exports = {
         });
     }
 
-}
+};
