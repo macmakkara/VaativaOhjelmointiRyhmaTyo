@@ -8,6 +8,8 @@ const router = express.Router();
 /* Testauspalikat yms. satunnainen debug sälä */
 router.route('/testconnection').get(testController.testconnection);
 router.route('/deleteAllScores').get(testController.deleteAllScores);
+router.route('/deleteAllGames').get(testController.deleteAllGames);
+router.route('/emptyDatabase').get(testController.emptyDatabase);
 router.route('/getGameList').get(testController.getGameList);
 
 
