@@ -13,8 +13,8 @@ mongoClient.connect(db_url, (err, yhteys) => {
     if (err) {
         console.log(err);
     } else {
-    console.log(yhteys);
-    console.log("Yhteys tietokantapalvelimeen luotu");
+        //console.log(yhteys);
+        //console.log("Yhteys tietokantapalvelimeen luotu");
     }
     db = yhteys;
 });
@@ -24,22 +24,22 @@ module.exports = {
 
     getAllScores: (callback) => {
 
-        db.collection("scores").aggregate([ 
+        db.collection("scores").aggregate([
             {
                 $lookup:
-                        { 
-                          from: "games",
-                          localField:"gametoken",
-                          foreignField:"gametoken",
-                          as:"game"
-                        }
+                    {
+                        from: "games",
+                        localField: "gametoken",
+                        foreignField: "gametoken",
+                        as: "game"
+                    }
             }]).toArray((virhe, rivit) => {
 
-            if (virhe) throw virhe;
-            console.log(rivit);
-            callback(virhe, rivit);
+                if (virhe) throw virhe;
+                console.log(rivit);
+                callback(virhe, rivit);
 
-        });
+            });
     },
 
     getGameScore: (game_id, callback) => {
@@ -84,6 +84,27 @@ module.exports = {
         });
     },
 
+    deleteAllGames: (callback) => {
+
+        db.collection("games").remove({}, (virhe, rivit) => {
+            if (virhe) throw virhe;
+
+            callback(virhe, rivit);
+        });
+    },
+    emptyDatabase: (callback) => {
+
+        db.collection("games").remove({}, (virhe, rivit) => {
+            if (virhe) throw virhe;
+
+            db.collection("scores").remove({}, (virhe, rivit) => {
+                if (virhe) throw virhe;
+
+                callback(virhe, rivit);
+            });
+        });
+    },
+
 
     findGameByName: (gamename, callback) => {
 
@@ -94,10 +115,10 @@ module.exports = {
 
     },
 
-    findGameById: (game_id, callback)=>{
+    findGameById: (game_id, callback) => {
         let id = mongodb.ObjectId(game_id);
 
-        db.collection("games").find({ "_id": id },{"gametoken":0 }).toArray((virhe, rivit) => {
+        db.collection("games").find({ "_id": id }, { "gametoken": 0 }).toArray((virhe, rivit) => {
             if (virhe) throw virhe;
             callback(virhe, rivit);
         });
