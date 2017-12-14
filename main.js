@@ -15,8 +15,8 @@ app.locals.pretty = true;
 
 
 app.use((req, res, next) => {
-    console.log("app.use!");
-    console.log(req.body);
+    //console.log("app.use!");
+    //console.log(req.body);
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With,Content-Type, Accept");
