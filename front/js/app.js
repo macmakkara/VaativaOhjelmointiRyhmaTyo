@@ -1,6 +1,4 @@
 var main = angular.module("main", []);
-
-// var apiUrl = "http://172.20.41.32:3333/api/";
 var apiUrl = "http://localhost:3333/api/";
 
 main.controller("mainController", function ($scope, $http, $interval, $timeout, testService, mockdataService, db_service) {
