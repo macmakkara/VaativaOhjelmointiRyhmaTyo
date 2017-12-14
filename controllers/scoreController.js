@@ -70,19 +70,30 @@ module.exports = {
             "game_id": req.body.game_id,
             "player": req.body.player,
             "score": req.body.score,
-            "gametoken": req.body.gametoken, 
-            "timestamp": moment().format("x")
+            "gametoken": req.body.gametoken,
         };
 
-        
+        //Horrible hack. Tiettyjen kenttien validointiin luulisi olevan dynaamisempi ja lyhyempikin keino
+        if (!pisteet.game_id) {
+            res.status(400).json("game_id on pakollinen kenttä");
+        } else if (!pisteet.player) {
+            res.status(400).json("player on pakollinen kenttä");
+        } else if (!pisteet.score) {
+            res.status(400).json("score on pakollinen kenttä");
+        } else if (!pisteet.gametoken) {
+            res.status(400).json("gametoken on pakollinen kenttä");
+        } else {
 
-        db_controller.postPlayerScore(pisteet, (virhe, vastaus) => {
+            pisteet.timestamp = moment().format("x");
 
-            if (virhe) {
-                res.status(500).json("Tapahtui virhe lisättäessä pisteitä: " + virhe);
-            } else {
-                res.status(200).json("Pisteet lisätty onnistuneesti");
-            }
-        })
+            db_controller.postPlayerScore(pisteet, (virhe, vastaus) => {
+
+                if (virhe) {
+                    res.status(500).json("Tapahtui virhe lisättäessä pisteitä: " + virhe);
+                } else {
+                    res.status(200).json("Pisteet lisätty onnistuneesti");
+                }
+            })
+        }
     }
 };
