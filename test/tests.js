@@ -49,16 +49,12 @@ var peli_3 = {
     "gametoken":""
 };
 
-
 var pistedata_1 = {
     "game_id": "",
     "player": "ToniTheTestiPelaaja",
     "score": 6666,
     "gametoken": "",
 };
-
-
-
 
 
 
@@ -78,8 +74,8 @@ describe("geneeriset testit (onko serveri päällä, vastaako kutsuihin jne..)",
 
     });
 
-
 });
+
 
 
 describe("POST - addgame", function () {
@@ -212,10 +208,7 @@ describe("POST - addgame", function () {
 
 
 
-
-
 describe("POST - addPlayerScore", function () {
-
 
     let url = apiUrl + "addplayerscore"
 
@@ -264,8 +257,7 @@ describe("POST - addPlayerScore", function () {
         });
     });
 
+
     //TODO, koko loppurouten tutkiminen.
-
-
 
 });
