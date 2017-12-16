@@ -148,7 +148,7 @@
 
                 <tbody ng-repeat="pisteet in kaikkipisteet track by $index">
                     <td>{{pisteet._id}}</td>
-                    <td>{{pisteet.game[0].peli_nimi}}</td>
+                    <td>{{pisteet.game.peli_nimi}}</td>
                     <td>{{pisteet.player}}</td>
                     <td>{{pisteet.score}}</td>
                     <td>{{pisteet.gametoken}}</td>

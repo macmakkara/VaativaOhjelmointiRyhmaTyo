@@ -22,7 +22,7 @@ module.exports = {
             } else {
                 res.status(200).json("Collection tyhjennetty onnistuneesti");
             }
-        })
+        });
     },
 
     deleteAllGames: function (req, res) {
@@ -37,7 +37,7 @@ module.exports = {
             } else {
                 res.status(200).json("Collection tyhjennetty onnistuneesti");
             }
-        })
+        });
     },
 
     emptyDatabase: function (req, res) {
@@ -51,7 +51,7 @@ module.exports = {
             } else {
                 res.status(200).json("Kanta tyhjennetty onnistuneesti");
             }
-        })
+        });
     },
 
     getGameList: function (req, res) {
@@ -67,10 +67,10 @@ module.exports = {
             } else {
                 res.status(200).json(vastaus);
             }
-        })
+        });
 
 
-    },
+    }
 
 
 

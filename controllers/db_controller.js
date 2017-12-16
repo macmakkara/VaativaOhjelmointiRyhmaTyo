@@ -33,7 +33,20 @@ module.exports = {
                         foreignField: "gametoken",
                         as: "game"
                     }
-            }]).toArray((virhe, rivit) => {
+                }, 
+                { 
+                    $unwind : "$game" 
+                },
+                {
+                    $project: {
+                        __v: 0,
+                        "game.__v": 0,
+                        "game._id": 0,
+                        "game.timestamp": 0,
+                        "game.gametoken": 0
+        }}
+
+            ]).toArray((virhe, rivit) => {
 
                 if (virhe) throw virhe;
                 console.log(rivit);
