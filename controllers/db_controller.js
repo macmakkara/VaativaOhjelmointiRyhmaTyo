@@ -3,9 +3,9 @@ const moment = require("moment");
 const mongodb = require("mongodb");
 const mongoClient = mongodb.MongoClient;
 const ObjectId = require('mongodb').ObjectID;
+const config_server = require("../configs/server");
 
-
-let db_url = "mongodb://localhost:27017/gamescore"; //Pitäisi varmaan siirtää configgiin: server.js?
+let db_url = "mongodb://"+ config_server.dburl; // Siirretty config/server.js
 
 let db;
 

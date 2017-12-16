@@ -64,7 +64,7 @@ main.service("mockdataService", function ($http, db_service) {
             });
 
     };
-})
+});
 
 
 main.service("db_service", function ($http) {
@@ -126,7 +126,7 @@ main.service("db_service", function ($http) {
         console.log("haetaan kaikkien pelien pisteet....");
         return $http({
             url: apiUrl + "getallscores",
-            method: "GET",
+            method: "GET"
 
         })
             .then(function (response) { // success
@@ -147,11 +147,12 @@ main.service("db_service", function ($http) {
     - jotta voi listata fronttiin mitä pelejä on kannassa
     - tehdä id:n perusteella jatkotoimenpiteitä (kuten hakea tietyn pelin pistetaulut)
     */
+   
     this.haePelit = function () {
         console.log("haetaan kaikki pelit...");
         return $http({
             url: apiUrl + "getGameList",
-            method: "GET",
+            method: "GET"
         })
             .then(function (response) { // success
                 console.log("kaikkipelit Success!");
@@ -189,6 +190,6 @@ main.service("db_service", function ($http) {
                 return response;
             });
     };
-})
+});
 
 
