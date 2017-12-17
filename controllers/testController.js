@@ -56,11 +56,11 @@ module.exports = {
 
     getGameList: function (req, res) {
 
-        console.log("getGameList");
+        //console.log("getGameList");
 
         db_controller.getGameList((virhe, vastaus) => {
-            console.log(virhe);
-            console.log(vastaus);
+            //console.log(virhe);
+           //console.log(vastaus);
 
             if (virhe) {
                 res.status(500).json(virhe);
