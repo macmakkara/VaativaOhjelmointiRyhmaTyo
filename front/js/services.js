@@ -31,18 +31,21 @@ main.service("mockdataService", function ($http, db_service) {
 
         return db_service.haePelit().then(function (vastaus) {
 
-            let satunnainen_peli = Math.floor(Math.random() * vastaus.data.length);
+            if (vastaus.data.length > 0) {
 
-            var testipelaajat = ["Jaska Jokunen", "Mikko Mallikas", "Toni Terävä", "Tero Testaaja", "+|-|3(1/-\55|(133+5|*3/-\]{|_|53|2/\//-\/\/\3\/\/|+|-|5|*3(|/-\15`//\/\l3()15", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÀÁÂÃÄÅÆÇ‌​ÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜ‌​ÝÞßàáâãäåæçèéêëìíîïð"];
-            
-            var pistedata = {
-                "game_id": vastaus.data[satunnainen_peli]._id,
-                "player": testipelaajat[Math.floor(Math.random() * testipelaajat.length)],
-                "score": Math.floor(Math.random() * 9000),
-                "gametoken": vastaus.data[satunnainen_peli].gametoken
-            };
+                let satunnainen_peli = Math.floor(Math.random() * vastaus.data.length);
 
-            return pistedata;
+                var testipelaajat = ["Jaska Jokunen", "Mikko Mallikas", "Toni Terävä", "Tero Testaaja", "+|-|3(1/-\55|(133+5|*3/-\]{|_|53|2/\//-\/\/\3\/\/|+|-|5|*3(|/-\15`//\/\l3()15", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÀÁÂÃÄÅÆÇ‌​ÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜ‌​ÝÞßàáâãäåæçèéêëìíîïð"];
+
+                var pistedata = {
+                    "game_id": vastaus.data[satunnainen_peli]._id,
+                    "player": testipelaajat[Math.floor(Math.random() * testipelaajat.length)],
+                    "score": Math.floor(Math.random() * 9000),
+                    "gametoken": vastaus.data[satunnainen_peli].gametoken
+                };
+
+                return pistedata;
+            }
         });
     };
 
@@ -62,7 +65,23 @@ main.service("mockdataService", function ($http, db_service) {
                 console.warn("tyhjennys FAIL!");
                 return response;
             });
+    };
 
+    this.tyhjennaKanta = function () {
+
+        console.log("Tyhjennetään koko tietokanta");
+        return $http({
+            url: apiUrl + "emptyDatabase/",
+            method: "GET"
+        })
+            .then(function (response) { // success
+                console.log("tyhjennys Success!");
+                return response;
+            })
+            .catch(function (response) { // error
+                console.warn("tyhjennys FAIL!");
+                return response;
+            });
     };
 });
 
@@ -97,7 +116,7 @@ main.service("db_service", function ($http) {
             .then(function (response) { // success
                 console.log("pelaajapisteet Success!");
                 console.log(response);
-                return response.data;
+                return response;
             })
             .catch(function (response) { // error
                 console.warn("pelaajapisteet FAIL!");
@@ -114,7 +133,7 @@ main.service("db_service", function ($http) {
             .then(function (response) { // success
                 console.log("pelinpisteet Success!");
                 console.log(response);
-                return response.data;
+                return response;
             })
             .catch(function (response) { // error
                 console.warn("pelinpisteet FAIL!");
@@ -132,7 +151,7 @@ main.service("db_service", function ($http) {
             .then(function (response) { // success
                 console.log("haeKaikkiPisteet Success!");
                 console.log(response);
-                return response.data;
+                return response;
             })
             .catch(function (response) { // error
                 console.warn("haeKaikkiPisteet FAIL!");
@@ -147,7 +166,7 @@ main.service("db_service", function ($http) {
     - jotta voi listata fronttiin mitä pelejä on kannassa
     - tehdä id:n perusteella jatkotoimenpiteitä (kuten hakea tietyn pelin pistetaulut)
     */
-   
+
     this.haePelit = function () {
         console.log("haetaan kaikki pelit...");
         return $http({
