@@ -103,7 +103,7 @@ main.controller("mainController", function ($scope, $http, $interval, $timeout, 
 
             if (vastaus.status == 200) {
                 $scope.pelilista = vastaus.data;
-                $scope.valittuPeli = vastaus.data[0].pelilista;
+                $scope.valittuPeli = vastaus.data[0];
                 
             } else {
                 $scope.luoViesti(vastaus, vastaus.data);
