@@ -40,6 +40,7 @@ module.exports = {
                 {
                     $project: {
                         __v: 0,
+                        "gametoken" : 0,
                         "game.__v": 0,
                         "game._id": 0,
                         "game.timestamp": 0,
@@ -49,7 +50,7 @@ module.exports = {
             ]).toArray((virhe, rivit) => {
 
                 if (virhe) throw virhe;
-                console.log(rivit);
+                
                 callback(virhe, rivit);
 
             });
@@ -79,13 +80,29 @@ module.exports = {
 
     postPlayerScore: (scoredata, callback) => {
 
-        db.collection("scores").insertOne(scoredata, (virhe, rivit) => {
+        db.collection("games").find({"_id" : ObjectId(scoredata.game_id)}).toArray((virhe, rivit) => {
+            console.log(rivit.length);
+            if (rivit.length === 1) {
+                if (scoredata.gametoken === rivit[0].gametoken) {
+                     db.collection("scores").insertOne(scoredata, (virhe, rivit) => {
 
-            if (virhe) throw virhe;
+                           if (virhe) throw virhe;
 
-            callback(virhe, rivit);
+                        callback(virhe, rivit);
+                        console.log("Token täsmää, Pisteet lisätty");
+                    });
 
+                } else {
+
+                    console.log("Token ei täsmää, pisteitä ei lisätty");
+                    callback(virhe, rivit);
+                }
+            } else {
+                console.log("Pelin ID ei tästää mihinkään peliin tai ID:llä löytyi useampi peli (Tämän ei pitäisi olla mahdollista)");
+                callback(virhe, rivit);
+            }
         });
+       
     },
 
     deleteAllScores: (callback) => {

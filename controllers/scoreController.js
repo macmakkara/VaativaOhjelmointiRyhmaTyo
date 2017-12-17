@@ -13,7 +13,7 @@ module.exports = {
             } else {
                 res.status(200).json(vastaus);
             }
-        })
+        });
     },
 
     //Hakee tietyn pelin kaikki pisteet, järjestää parhaimman mukaan
@@ -32,7 +32,7 @@ module.exports = {
 
                 res.status(200).json(vastaus);
             }
-        })
+        });
     },
 
     //Hakee tietyn pelaajan kaikkien pelien pisteet käyttäjänimen perusteella, järjestää parhaimman mukaan.
@@ -51,7 +51,7 @@ module.exports = {
 
                 res.status(200).json(vastaus);
             }
-        })
+        });
     },
 
     //Lisää tietyn pelaajan pisteet kantaan
@@ -70,7 +70,7 @@ module.exports = {
             "game_id": req.body.game_id,
             "player": req.body.player,
             "score": req.body.score,
-            "gametoken": req.body.gametoken,
+            "gametoken": req.body.gametoken
         };
 
         //Horrible hack. Tiettyjen kenttien validointiin luulisi olevan dynaamisempi ja lyhyempikin keino
@@ -93,7 +93,7 @@ module.exports = {
                 } else {
                     res.status(200).json("Pisteet lisätty onnistuneesti");
                 }
-            })
+            });
         }
     }
 };
