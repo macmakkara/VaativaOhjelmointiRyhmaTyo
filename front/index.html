@@ -2,7 +2,7 @@
 <html ng-app="main">
 
 <head>
-    <title>Jani Rantanen - testipenkki </title>
+    <title>API testipenkki</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css">
@@ -10,8 +10,15 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-animate.js"></script>
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+
+
+    <link href="ext_resources/angular-growl-2-master/build/angular-growl.css" rel="stylesheet">
+    <script type="text/javascript" src="ext_resources/angular-growl-2-master/build/angular-growl.js"></script>
+
 
     <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/services.js"></script>
@@ -29,30 +36,29 @@
 
                 <div class="navbar-header">
 
-                    <a class="navbar-brand" href="#"> SimpleClient </a>
+                    <a class="navbar-brand" href="#"> SimpleClient - Testipenkki </a>
 
                     <ul class="nav navbar-nav">
-                        <!-- <li><a href="#" ng-click="naytaKirjautuminen()">Kirjaudu</a></li> -->
+                        <li>
+                            <span class="label" ng-class="(serverStatus) ? 'label-success' : 'label-danger'">
+                                Yhteys palvelimeen
+                                <span class="glyphicon" ng-class="(serverStatus) ? 'glyphicon-ok' : 'glyphicon-remove' "></span>
+                            </span>
+                        </li>
 
-                        <p ng-show="serverStatus">
-                            <span class="label label-success">Yhteys palvelimeen ok</span>
-                        </p>
+                        <li>
+                            <span class="label" ng-class="(sanitycheck_view) ? 'label-success' : 'label-danger'">
+                                Yhteys View - App
+                                <span class="glyphicon" ng-class="(sanitycheck_view) ? 'glyphicon-ok' : 'glyphicon-remove' "></span>
+                            </span>
+                        </li>
 
-                        <p ng-hide="serverStatus">
-                            <span class="label label-danger">Ei yhteyttä palvelimeen </span>
-                        </p>
-
-
-                        Sanitycheck_view: {{sanitycheck_view}}
-                        <br /> Sanitycheck_service: {{sanitycheck_service}}
-                        <br/>
-                        <br/>
-                        <div class="row col-md-12">
-                            Viimeisin ilmoitus back-endistä:
-                            <span class="label" ng-class="{'label-success': viesti.status == 200 ,'label-danger': viesti.status !== 200}">{{viesti.data}}</span>
-                        </div>
-
-
+                        <li>
+                            <span class="label" ng-class="(sanitycheck_service) ? 'label-success' : 'label-danger'">
+                                Yhteys App - Service
+                                <span class="glyphicon" ng-class="(sanitycheck_service) ? 'glyphicon-ok' : 'glyphicon-remove' "></span>
+                            </span>
+                        </li>
                     </ul>
 
                 </div>
@@ -62,90 +68,78 @@
         </nav>
 
 
-
-
-        <div id="debug" ng-cloak>
-
-            <button type="button" class="btn btn-default" ng-click="tyhjennaPisteet()">Tyhjennä kanta (Scores)</button>
-            <br />
-            <br />
-            TODO: Sivun automaattinen päivitys. (Listat ei päivity jokaisen lähetyksen jälkeen, vaan pitää päivittää sivu)
+        <div id="debug" class="container" ng-cloak>
+            <!--
+            <div class="row col-md-12 well well-sm ">
+                Viimeisin ilmoitus back-endistä:
+                <span class="label " ng-class="{ 'label-success': viesti.status==200 , 'label-danger': viesti.status !==200} ">{{viesti.data}}</span>
+            </div>
+        -->
             <div class="row">
-                <h1 class="text-center">Pisteiden lähetys (DEBUG)</h1>
-                
+                <button type="button" class="btn btn-danger " ng-click="tyhjennaPisteet() ">Tyhjennä kanta (Scores)</button>
+                <button type="button" class="btn btn-danger " ng-click="tyhjennaKanta() ">Tyhjennä kanta (Scores & Games)</button>
+            </div>
+        </div>
+
+        <div class="col-md-6 well well-sm">
+            <h1 class="text-center ">Pisteiden lähetys</h1>
+            <div class="row col-md-12">
                 <div class="form-group">
-                    <label for="game_id" class="col-md-1 control-label">Game_id</label>
-                    <input type="text" class="col-md-3" name="game_id" ng-model="mockPisteet.game_id" class="form-control">
+                    <label for="game_id" class="col-md-3 control-label">Game_id</label>
+                    <input type="text" class="col-md-9" name="game_id" ng-model="mockPisteet.game_id" class="form-control ">
                 </div>
 
-                <br />
-                <br />
-            
-
-                <div class="form-group">
-                    <label for="player" class="col-md-1 control-label">Player</label>
-                    <input type="text" class="col-md-3" name="player" ng-model="mockPisteet.player" class="form-control">
+                <div class="form-group ">
+                    <label for="player" class="col-md-3 control-label ">Player</label>
+                    <input type="text" class="col-md-9" name="player " ng-model="mockPisteet.player" class="form-control ">
                 </div>
 
-                <br />
-                <br />
-
-                <div class="form-group">
-                    <label for="Score" class="col-md-1 control-label">Score</label>
-                    <input type="text" class="col-md-3" name="score" ng-model="mockPisteet.score" class="form-control">
+                <div class="form-group ">
+                    <label for="score" class="col-md-3 control-label ">Score</label>
+                    <input type="text" class="col-md-9" name="score " ng-model="mockPisteet.score" class="form-control ">
                 </div>
 
-                <br />
-                <br />
-
-                <div class="form-group">
-                    <label for="gametoken" class="col-md-1 control-label">Gametoken</label>
-                    <input type="text" class="col-md-3" name="gametoken" ng-model="mockPisteet.gametoken" class="form-control">
+                <div class="form-group ">
+                    <label for="gametoken" class="col-md-3 control-label">Gametoken</label>
+                    <input type="text" class="col-md-9" name="gametoken" ng-model="mockPisteet.gametoken" class="form-control ">
                 </div>
-
-                <br />
-                <br />
-
-                <button type="button" class="btn btn-default" ng-click="LuoMockPisteet()">Luo satunnainen pistedata</button>
-                <button type="button" class="btn btn-default" ng-click="lahetaPisteet(mockPisteet)">Lähetä pisteet</button>
-
-
             </div>
 
-            <hr> mockPisteet {{mockPisteet}}
-
-                <br />
-                <br />
-            <h1 class="text-center">Pelin lisäys (DEBUG)</h1>    
-            <div class="form-group">
-                <label for="peli_nimi" class="col-md-1 control-label">Peli_nimi</label>
-                <input type="text" class="col-md-3" name="peli_nimi" ng-model="mockPeli.peli_nimi" class="form-control">
+            <div class="row col-md-12">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-primary" ng-click="LuoMockPisteet()">Luo satunnainen pistedata</button>
+                    <button type="button" class="btn btn-success" ng-click="lahetaPisteet(mockPisteet)">Lähetä pisteet</button>
+                </div>
             </div>
+        </div>
 
-            <br />
-            <br />
+        <div class="col-md-6 well well-sm">
+            <h1 class="text-center">Pelin lisäys</h1>
+            <div class="row col-md-12">
+                <div class="form-group ">
+                    <label for="peli_nimi" class="col-md-3 control-label">Peli_nimi</label>
+                    <input type="text" class="col-md-9" name="peli_nimi" ng-model="mockPeli.peli_nimi " class="form-control ">
+                </div>
 
-            <button type="button" class="btn btn-default" ng-click="lahetaPeli(mockPeli)">Lähetä uusi peli</button>
-
-            <h1> Pelilista</h1>
-            <div ng-repeat="(key, value) in pelilista track by $index">
-                {{key}}: {{value}}
-                <br />
+                <button type="button " class="btn btn-success" ng-click="lahetaPeli(mockPeli) ">Lähetä uusi peli</button>
+                <span class="label label-success" ng-show="pelitoken !== undefined">
+                    Pelisi token on: {{pelitoken}}
+                </span>
             </div>
+        </div>
 
 
+        <div class="row col-md-12 well well-sm">
+            <h1 class="text-center"> Kaikkien pelien ja pelaajien pisteet</h1>
 
-
-            <h1> Kaikkien pelien ja pelaajien pisteet</h1>
-            <table class="table">
+            <table class="table table-condensed">
                 <thead>
                     <tr>
                         <th>Id</th>
                         <th>Peli</th>
                         <th>Pelaaja</th>
                         <th>Pisteet</th>
-                        <th>Pelitoken</th>
-                        <th>Timestamp</th>
+                        <th>Päivämäärä</th>
                     </tr>
                 </thead>
 
@@ -154,18 +148,15 @@
                     <td>{{pisteet.game.peli_nimi}}</td>
                     <td>{{pisteet.player}}</td>
                     <td>{{pisteet.score}}</td>
-                    <td>{{pisteet.gametoken}}</td>
-                    <td>{{pisteet.timestamp | date:"dd.MM.yyyy 'klo' HH:mm" }}</td>
-
+                    <td>{{pisteet.timestamp | date:"dd.MM.yyyy 'klo' HH:mm " }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
+
     </div>
-
-
-
+    <div growl></div>
 </body>
 
 </html>
