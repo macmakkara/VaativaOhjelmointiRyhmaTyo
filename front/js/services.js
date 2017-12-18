@@ -38,10 +38,10 @@ main.service("mockdataService", function ($http, db_service) {
                 var testipelaajat = ["Jaska Jokunen", "Mikko Mallikas", "Toni Terävä", "Tero Testaaja", "+|-|3(1/-\55|(133+5|*3/-\]{|_|53|2/\//-\/\/\3\/\/|+|-|5|*3(|/-\15`//\/\l3()15", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÀÁÂÃÄÅÆÇ‌​ÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜ‌​ÝÞßàáâãäåæçèéêëìíîïð"];
 
                 var pistedata = {
-                    "game_id": vastaus.data[satunnainen_peli]._id,
                     "player": testipelaajat[Math.floor(Math.random() * testipelaajat.length)],
                     "score": Math.floor(Math.random() * 9000),
-                    "gametoken": vastaus.data[satunnainen_peli].gametoken
+                    "game_id": "",
+                    "gametoken": ""
                 };
 
                 return pistedata;
