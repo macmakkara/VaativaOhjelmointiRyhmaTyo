@@ -1,5 +1,7 @@
 const moment = require("moment");
 const db_controller = require("./db_controller");
+const mongodb = require("mongodb");
+const ObjectId = require('mongodb').ObjectID;
 
 module.exports = {
     //TODO: Callback helvetin välttämiseksi pitäisi varmaan siirtyä promisen käyttöön.
@@ -12,7 +14,7 @@ module.exports = {
         if (!req.body.peli_nimi) {
             res.status(400).json("Pelin nimi on pakollinen tieto!");
 
-         } else {
+        } else {
 
             //Tarkistetaan onko samanniminen peli jo kannassa
             db_controller.findGameByName(req.body.peli_nimi, (virhe, vastaus) => {
@@ -38,9 +40,9 @@ module.exports = {
                                 res.status(500).json("Tapahtui virhe lisättäessä peliä. Virhe: " + virhe);
                             } else {
 
-                               
+
                                 let authData = {
-                                    "game_id":vastaus.ops[0]._id,
+                                    "game_id": vastaus.ops[0]._id,
                                     "gametoken": vastaus.ops[0].gametoken
                                 };
 
@@ -69,14 +71,29 @@ module.exports = {
 
     findGameById: function (req, res) {
 
-        db_controller.findGameById(req.params.game_id, (virhe, vastaus) => {
 
-            if (virhe) {
-                res.status(500).json("Tapahtui virhe haettaessa peliä. Virhe: " + virhe);
-            } else {
-                res.status(200).json(vastaus);
-            }
-        })
+        if (!ObjectId.isValid(req.params.game_id)) {
+
+            res.status(400).json("game_id ei ole muodollisesti oikea!")
+
+        } else {
+
+            db_controller.findGameById(req.params.game_id, (virhe, vastaus) => {
+
+                if (virhe) {
+                    res.status(500).json("Tapahtui virhe haettaessa peliä. Virhe: " + virhe);
+                } else {
+
+                    if (vastaus.length == 0) {
+                        res.status(404).json("Peliä ei ole olemassa!")
+                    } else {
+                        res.status(200).json(vastaus);
+                    }
+
+                }
+            })
+        }
     },
+
 
 };
