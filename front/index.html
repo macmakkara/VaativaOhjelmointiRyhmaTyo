@@ -122,9 +122,16 @@
                 </div>
 
                 <button type="button " class="btn btn-success" ng-click="lahetaPeli(mockPeli) ">Lähetä uusi peli</button>
-                <span class="label label-success" ng-show="pelitoken !== undefined">
-                    Pelisi token on: {{pelitoken}}
-                </span>
+
+            </div>
+            <div class="row col-md-12" ng-show="pelitoken !== undefined">
+                Lähettäessä pisteitä käytä näitä tietoja:
+                <div class="panel panel-default">
+                    <span ng-repeat="(key, value) in pelitoken">
+                        {{key}}:{{value}}
+                        <br/>
+                    </span>
+                </div>
             </div>
         </div>
 
