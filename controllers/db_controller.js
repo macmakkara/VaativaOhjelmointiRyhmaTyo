@@ -59,7 +59,7 @@ module.exports = {
 
     getGameScore: (game_id, callback) => {
 
-        db.collection("scores").find({ "game_id": game_id }).toArray((virhe, rivit) => {
+        db.collection("scores").find({ "game_id": game_id }, {"gametoken":0 }).toArray((virhe, rivit) => {
 
             if (virhe) throw virhe;
 
@@ -157,7 +157,15 @@ module.exports = {
         });
 
     },
+    
+    findPlayerByName: (player, callback) => {
 
+        db.collection("scores").find({ "player": player }).toArray((virhe, rivit) => {
+            if (virhe) throw virhe;
+            callback(virhe, rivit);
+        });
+
+    },
 
     addGame: (gamedata, callback) => {
 
@@ -172,9 +180,8 @@ module.exports = {
 
 
     getGameList: (callback) => {
-        //Palauttaa kaikki tiedot pelistä (MYÖS TOKEN, jemmataan lisäämällä findin parametreihin {"gametoken":0 })
-        //Testauksen kannalta jätin näkyviin
-        db.collection("games").find({}).toArray((virhe, rivit) => {
+
+        db.collection("games").find({},{"gametoken":0 }).toArray((virhe, rivit) => {
             if (virhe) throw virhe;
             callback(virhe, rivit);
         });
