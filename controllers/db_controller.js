@@ -5,7 +5,7 @@ const mongoClient = mongodb.MongoClient;
 const ObjectId = require('mongodb').ObjectID;
 const config_server = require("../configs/server");
 
-let db_url = "mongodb://"+ config_server.dburl; // Siirretty config/server.js
+let db_url = "mongodb://" + config_server.dburl; // Siirretty config/server.js
 
 let db;
 
@@ -33,27 +33,28 @@ module.exports = {
                         foreignField: "gametoken",
                         as: "game"
                     }
-                }, 
-                { 
-                    $unwind : "$game" 
-                },
-                {
-                    $project: {
-                        __v: 0,
-                        "gametoken" : 0,
-                        "game.__v": 0,
-                        "game._id": 0,
-                        "game.timestamp": 0,
-                        "game.gametoken": 0
-        }}
+            },
+            {
+                $unwind: "$game"
+            },
+            {
+                $project: {
+                    __v: 0,
+                    "gametoken": 0,
+                    "game.__v": 0,
+                    "game._id": 0,
+                    "game.timestamp": 0,
+                    "game.gametoken": 0
+                }
+            }
 
-            ]).toArray((virhe, rivit) => {
+        ]).toArray((virhe, rivit) => {
 
-                if (virhe) throw virhe;
-                
-                callback(virhe, rivit);
+            if (virhe) throw virhe;
 
-            });
+            callback(virhe, rivit);
+
+        });
     },
 
     getGameScore: (game_id, callback) => {
@@ -80,13 +81,13 @@ module.exports = {
 
     postPlayerScore: (scoredata, callback) => {
 
-        db.collection("games").find({"_id" : ObjectId(scoredata.game_id)}).toArray((virhe, rivit) => {
+        db.collection("games").find({ "_id": ObjectId(scoredata.game_id) }).toArray((virhe, rivit) => {
             console.log(rivit.length);
             if (rivit.length === 1) {
                 if (scoredata.gametoken === rivit[0].gametoken) {
-                     db.collection("scores").insertOne(scoredata, (virhe, rivit) => {
+                    db.collection("scores").insertOne(scoredata, (virhe, rivit) => {
 
-                           if (virhe) throw virhe;
+                        if (virhe) throw virhe;
 
                         callback(virhe, rivit);
                         console.log("Token täsmää, Pisteet lisätty");
@@ -95,14 +96,14 @@ module.exports = {
                 } else {
 
                     console.log("Token ei täsmää, pisteitä ei lisätty");
-                    callback(virhe, rivit);
+                    callback("Token ei täsmää, pisteitä ei lisätty", rivit);
                 }
             } else {
                 console.log("Pelin ID ei tästää mihinkään peliin tai ID:llä löytyi useampi peli (Tämän ei pitäisi olla mahdollista)");
-                callback(virhe, rivit);
+                callback("Pelin ID ei tästää mihinkään peliin tai ID:llä löytyi useampi peli (Tämän ei pitäisi olla mahdollista)", rivit);
             }
         });
-       
+
     },
 
     deleteAllScores: (callback) => {
