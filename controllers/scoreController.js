@@ -1,5 +1,7 @@
 const moment = require("moment");
 const db_controller = require("./db_controller");
+const mongodb = require("mongodb");
+const ObjectId = require('mongodb').ObjectID;
 
 module.exports = {
 
@@ -84,16 +86,23 @@ module.exports = {
             res.status(400).json("gametoken on pakollinen kenttä");
         } else {
 
-            pisteet.timestamp = moment().format("x");
+            if (!ObjectId.isValid(req.body.game_id)) {
+                res.status(400).json("game_id ei ole muodollisesti oikea!")
+            } else if (isNaN(pisteet.score)){
+                res.status(400).json("score ei ole validi numero");
+            } else {
 
-            db_controller.postPlayerScore(pisteet, (virhe, vastaus) => {
+                pisteet.timestamp = moment().format("x");
 
-                if (virhe) {
-                    res.status(500).json("Tapahtui virhe lisättäessä pisteitä: " + virhe);
-                } else {
-                    res.status(200).json("Pisteet lisätty onnistuneesti");
-                }
-            });
+                db_controller.postPlayerScore(pisteet, (virhe, vastaus) => {
+
+                    if (virhe) {
+                        res.status(400).json("Tapahtui virhe lisättäessä pisteitä: " + virhe);
+                    } else {
+                        res.status(200).json("Pisteet lisätty onnistuneesti");
+                    }
+                });
+            }
         }
     }
 };
