@@ -44,7 +44,7 @@ module.exports = {
                     "game._id": 0,
                     "game.timestamp": 0,
                     "game.gametoken": 0,
-                    "_id":0
+                    "_id": 0
                 }
             }
 
@@ -59,7 +59,7 @@ module.exports = {
 
     getGameScore: (game_id, callback) => {
 
-        db.collection("scores").find({ "game_id": game_id }, {"gametoken":0 }).toArray((virhe, rivit) => {
+        db.collection("scores").find({ "game_id": game_id }, { "gametoken": 0 }).toArray((virhe, rivit) => {
 
             if (virhe) throw virhe;
 
@@ -68,9 +68,23 @@ module.exports = {
         });
     },
 
-    getPlayerScore: (playername, callback) => {
+    getPlayerScore: (playername, game_id, callback) => {
 
-        db.collection("scores").find({ "player": playername }).toArray((virhe, rivit) => {
+        var queryObject;
+
+        if (game_id !== undefined) {
+            queryObject = {
+                "player": playername,
+                "game_id": game_id,
+            };
+        } else {
+            queryObject = {
+                "player": playername,
+            };
+        }
+
+        console.log(queryObject);
+        db.collection("scores").find(queryObject).toArray((virhe, rivit) => {
 
             if (virhe) throw virhe;
 
@@ -82,7 +96,7 @@ module.exports = {
     postPlayerScore: (scoredata, callback) => {
 
         db.collection("games").find({ "_id": ObjectId(scoredata.game_id) }).toArray((virhe, rivit) => {
-            
+
             if (rivit.length === 1) {
 
                 if (scoredata.gametoken === rivit[0].gametoken) {
@@ -102,7 +116,7 @@ module.exports = {
             } else {
 
                 callback("Pelin ID ei tästää mihinkään peliin tai ID:llä löytyi useampi peli (Tämän ei pitäisi olla mahdollista)", rivit);
-           
+
             }
         });
 
@@ -157,7 +171,7 @@ module.exports = {
         });
 
     },
-    
+
     findPlayerByName: (player, callback) => {
 
         db.collection("scores").find({ "player": player }).toArray((virhe, rivit) => {
