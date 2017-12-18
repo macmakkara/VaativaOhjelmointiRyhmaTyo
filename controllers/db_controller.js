@@ -44,7 +44,8 @@ module.exports = {
                     "game.__v": 0,
                     "game._id": 0,
                     "game.timestamp": 0,
-                    "game.gametoken": 0
+                    "game.gametoken": 0,
+                    "_id":0
                 }
             }
 
