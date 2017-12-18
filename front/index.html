@@ -133,6 +133,32 @@
             </div>
         </div>
 
+        <div class="row col-md-12 well well-sm">
+            <h1 class="text-center"> Kaikki pelit</h1>
+
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Gametoken</th>
+                        <th>Nimi</th>
+                        <th>Lisätty pvm</th>
+
+                    </tr>
+                </thead>
+
+                <tbody ng-repeat="peli in pelilista track by $index">
+                    <tr>
+                        <td>{{peli._id}}</td>
+                        <td>{{peli.gametoken}}</td>
+                        <td>{{peli.peli_nimi}}</td>
+                        <td>{{peli.timestamp | date:"dd.MM.yyyy 'klo' HH:mm "}}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
 
         <div class="row col-md-12 well well-sm">
             <h1 class="text-center"> Kaikkien pelien ja pelaajien pisteet</h1>
@@ -144,6 +170,7 @@
                         <th>Pelaaja</th>
                         <th>Pisteet</th>
                         <th>Päivämäärä</th>
+
                     </tr>
                 </thead>
 
