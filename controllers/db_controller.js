@@ -4,22 +4,25 @@ const mongoClient = mongodb.MongoClient;
 const ObjectId = require('mongodb').ObjectID;
 const config_server = require("../configs/server");
 
-let db_url = "mongodb://" + config_server.dburl; // Siirretty config/server.js
+let db_url = "mongodb://" + config_server.dburl;
 
 let db;
 
 mongoClient.connect(db_url, (err, yhteys) => {
+
     if (err) {
+
         console.log(err);
+
     } else {
-        //console.log(yhteys);
-        //console.log("Yhteys tietokantapalvelimeen luotu");
+
+        console.log("Yhteys tietokantapalvelimeen luotu");
+
     }
     db = yhteys.db("gamescore");
 });
 
 module.exports = {
-
 
     getAllScores: (callback) => {
 
@@ -83,7 +86,6 @@ module.exports = {
             };
         }
 
-        console.log(queryObject);
         db.collection("scores").find(queryObject).toArray((virhe, rivit) => {
 
             if (virhe) throw virhe;
@@ -91,31 +93,34 @@ module.exports = {
             callback(virhe, rivit);
 
         });
+
     },
 
     postPlayerScore: (scoredata, callback) => {
 
-        db.collection("games").find({ "_id": ObjectId(scoredata.game_id) }).toArray((virhe, rivit) => {
+        db.collection("games").find({ "_id": ObjectId(scoredata.game_id) }).toArray((virhe_games, rivit_games) => {
 
-            if (rivit.length === 1) {
+            if (virhe_games) throw virhe_games;
 
-                if (scoredata.gametoken === rivit[0].gametoken) {
+            if (rivit_games.length === 1) {
 
-                    db.collection("scores").insertOne(scoredata, (virhe, rivit) => {
+                if (scoredata.gametoken === rivit_games[0].gametoken) {
 
-                        if (virhe) throw virhe;
+                    db.collection("scores").insertOne(scoredata, (virhe_scores, rivit_scores) => {
 
-                        callback(virhe, rivit);
+                        if (virhe_scores) throw virhe_scores;
+
+                        callback(virhe_scores, rivit_scores);
                     });
 
                 } else {
 
-                    callback("Token ei täsmää, pisteitä ei lisätty", rivit);
+                    callback("Token ei täsmää, pisteitä ei lisätty");
 
                 }
             } else {
 
-                callback("Pelin ID ei tästää mihinkään peliin tai ID:llä löytyi useampi peli (Tämän ei pitäisi olla mahdollista)", rivit);
+                callback("Pelin ID ei tästää mihinkään peliin tai ID:llä löytyi useampi peli (Tämän ei pitäisi olla mahdollista)");
 
             }
         });
@@ -125,20 +130,26 @@ module.exports = {
     deleteAllScores: (callback) => {
 
         db.collection("scores").remove({}, (virhe, rivit) => {
+
             if (virhe) throw virhe;
 
             callback(virhe, rivit);
+
         });
+
     },
 
     deleteAllGames: (callback) => {
 
         db.collection("games").remove({}, (virhe, rivit) => {
+
             if (virhe) throw virhe;
 
             callback(virhe, rivit);
+
         });
     },
+
     emptyDatabase: (callback) => {
 
         db.collection("games").remove({}, (virhe, rivit) => {
@@ -156,18 +167,25 @@ module.exports = {
     findGameByName: (gamename, callback) => {
 
         db.collection("games").find({ "peli_nimi": gamename }).toArray((virhe, rivit) => {
+
             if (virhe) throw virhe;
+
             callback(virhe, rivit);
+
         });
 
     },
 
     findGameById: (game_id, callback) => {
+
         let id = mongodb.ObjectId(game_id);
 
         db.collection("games").find({ "_id": id }, { "gametoken": 0 }).toArray((virhe, rivit) => {
+
             if (virhe) throw virhe;
+
             callback(virhe, rivit);
+
         });
 
     },
@@ -175,8 +193,11 @@ module.exports = {
     findPlayerByName: (player, callback) => {
 
         db.collection("scores").find({ "player": player }).toArray((virhe, rivit) => {
+
             if (virhe) throw virhe;
+
             callback(virhe, rivit);
+
         });
 
     },
@@ -194,11 +215,17 @@ module.exports = {
 
 
     getGameList: (callback) => {
+
         //Oikeaan sovellukseen lisää: ,{"gametoken":0 }
+
         db.collection("games").find({}).toArray((virhe, rivit) => {
+
             if (virhe) throw virhe;
+
             callback(virhe, rivit);
+
         });
+
     }
 
 };
