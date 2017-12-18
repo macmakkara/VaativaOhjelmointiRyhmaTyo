@@ -202,9 +202,7 @@ describe("INTEGRATION", function () {
                 });
             });
 
-
         });
-
 
     });
 
@@ -298,7 +296,7 @@ describe("INTEGRATION", function () {
         });
 
 
-        describe("Pisteiden lisäys peliin: " + peli_1.peli_nimi + " väärällä id:llä (oikea token)", function () {
+        describe("Pisteiden lisäys peliin: " + peli_1.peli_nimi + ", "+ peli_2.peli_nimi + "id:llä (peli_1 token)", function () {
             it("Palauttaa statuskoodin 400 Bad Request", function (done) {
                 pistedata_1.game_id = peli_2.game_id;
                 pistedata_1.gametoken = peli_1.gametoken;
@@ -311,7 +309,7 @@ describe("INTEGRATION", function () {
             });
         });
 
-        describe("Pisteiden lisäys peliin: " + peli_1.peli_nimi + " pelin " + peli_2.peli_nimi + " tokenilla (oikea id, väärä token)", function () {
+        describe("Pisteiden lisäys peliin: " + peli_1.peli_nimi + " pelin " + peli_2.peli_nimi + " tokenilla (peli_1 id, peli_2 token)", function () {
             it("Palauttaa statuskoodin 400 Bad Request", function (done) {
                 pistedata_1.game_id = peli_1.game_id;
                 pistedata_1.gametoken = peli_2.gametoken;
@@ -324,7 +322,7 @@ describe("INTEGRATION", function () {
             });
         });
 
-        describe("Pisteiden lisäys peliin: " + peli_1.peli_nimi + " pelin " + peli_2.peli_nimi + " id:llä (oikea token, väärä id)", function () {
+        describe("Pisteiden lisäys peliin: " + peli_1.peli_nimi + " pelin " + peli_2.peli_nimi + " id:llä (peli_2 token, peli_1 id)", function () {
             it("Palauttaa statuskoodin 400 Bad Request", function (done) {
                 pistedata_1.game_id = peli_2.game_id;
                 pistedata_1.gametoken = peli_1.gametoken;
@@ -378,7 +376,7 @@ describe("INTEGRATION", function () {
 
         });
 
-        describe("Pisteiden lisäys peliin " + peli_1.peli_nimi + ": pistemäärä string", function () {
+        describe("Pisteiden lisäys peliin " + peli_1.peli_nimi + ": pistemäärä string (mutta yhä numero)", function () {
             it("Palauttaa statuskoodin 200 OK", function (done) {
                 pistedata_1.game_id = peli_1.game_id;
                 pistedata_1.gametoken = peli_1.gametoken;
@@ -406,7 +404,7 @@ describe("INTEGRATION", function () {
                 });
             });
 
-            it("Palauttaa kolmet pisteet", function (done) {
+            it("Palauttaa neljät pisteet", function (done) {
                 request.get(url, function (error, response, body) {
                     expect(JSON.parse(body).length).to.equal(4);
                     done();
@@ -444,7 +442,7 @@ describe("INTEGRATION", function () {
                     done();
                 });
             });
-            it("Palauttaa yhdet pisteet", function (done) {
+            it("Palauttaa tasan yhdet pisteet", function (done) {
                 request.get(url + peli_2.game_id, function (error, response, body) {
                     expect(JSON.parse(body).length).to.equal(1);
                     done();
@@ -497,7 +495,7 @@ describe("INTEGRATION", function () {
 
         let url = apiUrl + "getplayerscore/";
 
-        describe("Palauttaa pistedata_1 pelaajan pisteet (2 kenttää)", function () {
+        describe("Palauttaa pistedata_1 pelaajan pisteet (3 kenttää)", function () {
             it("Palauttaa statuskoodin 200 OK", function (done) {
                 request.get(url + pistedata_1.player, function (error, response, body) {
                     expect(response.statusCode).to.equal(200);
@@ -552,7 +550,6 @@ describe("INTEGRATION", function () {
 
         it("Palauttaa statuskoodin 400 (pelaaja oikein, game_id muodollisesti väärin)", function (done) {
             request.get(url + pistedata_1.player +"/abc123", function (error, response, body) {
-                console.log(body);
                 expect(response.statusCode).to.equal(400);
                 done();
             });
