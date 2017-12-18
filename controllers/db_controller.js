@@ -82,25 +82,27 @@ module.exports = {
     postPlayerScore: (scoredata, callback) => {
 
         db.collection("games").find({ "_id": ObjectId(scoredata.game_id) }).toArray((virhe, rivit) => {
-            console.log(rivit.length);
+            
             if (rivit.length === 1) {
+
                 if (scoredata.gametoken === rivit[0].gametoken) {
+
                     db.collection("scores").insertOne(scoredata, (virhe, rivit) => {
 
                         if (virhe) throw virhe;
 
                         callback(virhe, rivit);
-                        console.log("Token täsmää, Pisteet lisätty");
                     });
 
                 } else {
 
-                    console.log("Token ei täsmää, pisteitä ei lisätty");
                     callback("Token ei täsmää, pisteitä ei lisätty", rivit);
+
                 }
             } else {
-                console.log("Pelin ID ei tästää mihinkään peliin tai ID:llä löytyi useampi peli (Tämän ei pitäisi olla mahdollista)");
+
                 callback("Pelin ID ei tästää mihinkään peliin tai ID:llä löytyi useampi peli (Tämän ei pitäisi olla mahdollista)", rivit);
+           
             }
         });
 
