@@ -43,7 +43,7 @@ module.exports = {
                                     "game_id":vastaus.ops[0]._id,
                                     "gametoken": vastaus.ops[0].gametoken
                                 };
-                                
+
                                 res.status(200).json(authData);
                             }
 
@@ -53,6 +53,17 @@ module.exports = {
 
             })
         }
+    },
+
+    getGameList: function (req, res) {
+
+        db_controller.getGameList((virhe, vastaus) => {
+            if (virhe) {
+                res.status(500).json(virhe);
+            } else {
+                res.status(200).json(vastaus);
+            }
+        });
     },
 
 
