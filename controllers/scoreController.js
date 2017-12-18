@@ -60,7 +60,6 @@ module.exports = {
     //Hakee tietyn pelaajan kaikkien pelien pisteet käyttäjänimen perusteella, järjestää parhaimman mukaan.
     getPlayerScore: function (req, res) {
 
-
         db_controller.findPlayerByName(req.params.playername, (virhe_findPlayerByName, vastaus_findPlayerByName) => {
 
             if (virhe_findPlayerByName) throw virhe_findPlayerByName;
@@ -70,9 +69,14 @@ module.exports = {
                 res.status(404).json("Pelaajaa ei ole olemassa!");
 
             } else {
+                if (req.params.game_id) {
+                    if (!ObjectId.isValid(req.params.game_id)) {
+                        res.status(400).json("game_id ei ole muodollisesti oikea!")
+                        return; //Horrible hack, jotta ei herjaa "cant set headers after they are sent"
+                    }
+                }
 
-                //TODO, virheenhallinta, useammat parametrit jne...
-                db_controller.getPlayerScore(req.params.playername, (virhe, vastaus) => {
+                db_controller.getPlayerScore(req.params.playername, req.params.game_id, (virhe, vastaus) => {
 
                     if (virhe) {
                         res.status(500).json("Tapahtui virhe haettaessa pelaajan:" + req.params.playername + "pisteitä. Yritä hetken kuluttua uudelleen. Virhe:" + +virhe);
@@ -85,6 +89,7 @@ module.exports = {
                         res.status(200).json(vastaus);
                     }
                 });
+
             }
         });
     },
