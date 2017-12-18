@@ -180,8 +180,8 @@ module.exports = {
 
 
     getGameList: (callback) => {
-
-        db.collection("games").find({},{"gametoken":0 }).toArray((virhe, rivit) => {
+        //Oikeaan sovellukseen lisää: ,{"gametoken":0 }
+        db.collection("games").find({}).toArray((virhe, rivit) => {
             if (virhe) throw virhe;
             callback(virhe, rivit);
         });
