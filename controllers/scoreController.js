@@ -21,37 +21,70 @@ module.exports = {
     //Hakee tietyn pelin kaikki pisteet, järjestää parhaimman mukaan
     getGameScore: function (req, res) {
 
-        //TODO, virheenhallinta, useammat parametrit jne...
-        db_controller.getGameScore(req.params.game_id, (virhe, vastaus) => {
+        if (!ObjectId.isValid(req.params.game_id)) {
 
-            if (virhe) {
-                res.status(500).json("Tapahtui virhe haettaessa pelin pisteitä: " + virhe);
-            } else {
+            res.status(400).json("game_id ei ole muodollisesti oikea!")
 
-                vastaus.sort(function (a, b) {
-                    return parseFloat(b.score) - parseFloat(a.score);
-                });
+        } else {
 
-                res.status(200).json(vastaus);
-            }
-        });
+            db_controller.findGameById(req.params.game_id, (virhe_findGameById, vastaus_findGameById) => {
+
+                if (virhe_findGameById) throw virhe_findGameById;
+
+                if (vastaus_findGameById.length == 0) {
+
+                    res.status(404).json("Peliä ei löytynyt!");
+
+                } else {
+
+                    db_controller.getGameScore(req.params.game_id, (virhe, vastaus) => {
+
+                        if (virhe) {
+
+                            res.status(500).json("Tapahtui virhe haettaessa pelin pisteitä: " + virhe);
+
+                        } else {
+
+                            vastaus.sort(function (a, b) {
+                                return parseFloat(b.score) - parseFloat(a.score);
+                            });
+
+                            res.status(200).json(vastaus);
+                        }
+                    });
+                }
+            })
+        }
     },
 
     //Hakee tietyn pelaajan kaikkien pelien pisteet käyttäjänimen perusteella, järjestää parhaimman mukaan.
     getPlayerScore: function (req, res) {
 
-        //TODO, virheenhallinta, useammat parametrit jne...
-        db_controller.getPlayerScore(req.params.playername, (virhe, vastaus) => {
 
-            if (virhe) {
-                res.status(500).json("Tapahtui virhe haettaessa pelaajan:" + req.params.playername + "pisteitä. Yritä hetken kuluttua uudelleen. Virhe:" + +virhe);
+        db_controller.findPlayerByName(req.params.playername, (virhe_findPlayerByName, vastaus_findPlayerByName) => {
+
+            if (virhe_findPlayerByName) throw virhe_findPlayerByName;
+
+            if (vastaus_findPlayerByName.length == 0) {
+
+                res.status(404).json("Pelaajaa ei ole olemassa!");
+
             } else {
 
-                vastaus.sort(function (a, b) {
-                    return parseFloat(b.score) - parseFloat(a.score);
-                });
+                //TODO, virheenhallinta, useammat parametrit jne...
+                db_controller.getPlayerScore(req.params.playername, (virhe, vastaus) => {
 
-                res.status(200).json(vastaus);
+                    if (virhe) {
+                        res.status(500).json("Tapahtui virhe haettaessa pelaajan:" + req.params.playername + "pisteitä. Yritä hetken kuluttua uudelleen. Virhe:" + +virhe);
+                    } else {
+
+                        vastaus.sort(function (a, b) {
+                            return parseFloat(b.score) - parseFloat(a.score);
+                        });
+
+                        res.status(200).json(vastaus);
+                    }
+                });
             }
         });
     },
@@ -88,7 +121,7 @@ module.exports = {
 
             if (!ObjectId.isValid(req.body.game_id)) {
                 res.status(400).json("game_id ei ole muodollisesti oikea!")
-            } else if (isNaN(pisteet.score)){
+            } else if (isNaN(pisteet.score)) {
                 res.status(400).json("score ei ole validi numero");
             } else {
 
