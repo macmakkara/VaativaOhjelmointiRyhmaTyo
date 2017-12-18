@@ -1,4 +1,3 @@
-const mysql = require("mysql");
 const moment = require("moment");
 const mongodb = require("mongodb");
 const mongoClient = mongodb.MongoClient;
