@@ -15,7 +15,7 @@ mongoClient.connect(db_url, (err, yhteys) => {
         //console.log(yhteys);
         //console.log("Yhteys tietokantapalvelimeen luotu");
     }
-    db = yhteys;
+    db = yhteys.db("gamescore");
 });
 
 module.exports = {
