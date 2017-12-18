@@ -186,7 +186,7 @@ main.service("db_service", function ($http) {
     /*
         Tämän pitäisi lisätä uusi peli kantaan:
         - INPUT: pelin selkokielinen nimi
-        - OUTPUT: palauttaa uuden lisätyn pelin tokenin (tai virheen, jos sellainen on)
+        - OUTPUT: palauttaa uuden lisätyn pelin authdatan (tai virheen, jos sellainen on)
     */
     this.uusiPeli = function (pelidata) {
 
