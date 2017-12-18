@@ -40,8 +40,6 @@ main.service("mockdataService", function ($http, db_service) {
                 var pistedata = {
                     "player": testipelaajat[Math.floor(Math.random() * testipelaajat.length)],
                     "score": Math.floor(Math.random() * 9000),
-                    "game_id": "",
-                    "gametoken": ""
                 };
 
                 return pistedata;
