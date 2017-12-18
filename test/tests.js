@@ -382,6 +382,21 @@ describe("POST - addPlayerScore", function () {
 
     });
 
+    describe("Pisteiden lisäys peliin " + peli_1.peli_nimi + ": pistemäärä string", function () {
+        it("Palauttaa statuskoodin 400 Bad Request", function (done) {
+            pistedata_1.game_id = peli_1.game_id;
+            pistedata_1.gametoken = peli_1.gametoken;
+            pistedata_1.score = "9001";
+
+            request.post(url, { json: pistedata_1 }, function (error, response, body) {
+                console.log(body);
+                expect(response.statusCode).to.equal(200);
+                done();
+            });
+        });
+
+    });
+
 
 
 
@@ -407,7 +422,7 @@ describe("GET - getallscores", function () {
 
         it("Palauttaa kolmet pisteet", function (done) {
             request.get(url, function (error, response, body) {
-                expect(JSON.parse(body).length).to.equal(3);
+                expect(JSON.parse(body).length).to.equal(4);
                 done();
             });
         });
@@ -420,7 +435,7 @@ describe("GET - getgamescore", function () {
 
     let url = apiUrl + "getgamescore/"
 
-    describe("Palauttaa ensimmäisen pelin pisteet (2 kenttää)", function () {
+    describe("Palauttaa ensimmäisen pelin pisteet (3 kenttää)", function () {
         it("Palauttaa statuskoodin 200 OK", function (done) {
             request.get(url + peli_1.game_id, function (error, response, body) {
                 expect(response.statusCode).to.equal(200);
@@ -428,9 +443,9 @@ describe("GET - getgamescore", function () {
             });
         });
 
-        it("Palauttaa tasan kahdet pisteet", function (done) {
+        it("Palauttaa tasan kolmet pisteet", function (done) {
             request.get(url + peli_1.game_id, function (error, response, body) {
-                expect(JSON.parse(body).length).to.equal(2);
+                expect(JSON.parse(body).length).to.equal(3);
                 done();
             });
         });
@@ -495,7 +510,7 @@ describe("GET - getgamescore", function () {
 describe("GET - getplayerscore", function () {
 
     let url = apiUrl + "getplayerscore/"
-    //TODO
+
     describe("Palauttaa pistedata_1 pelaajan pisteet (2 kenttää)", function () {
         it("Palauttaa statuskoodin 200 OK", function (done) {
             request.get(url + pistedata_1.player, function (error, response, body) {
@@ -504,9 +519,9 @@ describe("GET - getplayerscore", function () {
             });
         });
 
-        it("Palauttaa tasan kahdet pisteet", function (done) {
+        it("Palauttaa tasan kolmet pisteet", function (done) {
             request.get(url + pistedata_1.player, function (error, response, body) {
-                expect(JSON.parse(body).length).to.equal(2);
+                expect(JSON.parse(body).length).to.equal(3);
                 done();
             });
         });
@@ -525,7 +540,7 @@ describe("GET - getplayerscore", function () {
                 expect(JSON.parse(body).length).to.equal(1);
                 done();
             });
-        });
+        });let testi_id = ObjectId.ObjectID();
     });
 
     describe("Palauttaa 404 (pelaajaa ei ole olemassa)", function () {
@@ -545,4 +560,76 @@ describe("GET - getplayerscore", function () {
     });
 
 
+});
+
+
+describe("GET - getGameList", function () {
+
+    let url = apiUrl + "getGameList"
+
+    describe("Palauttaa pelien listan", function () {
+        it("Palauttaa statuskoodin 200 OK", function (done) {
+            request.get(url, function (error, response, body) {
+                expect(response.statusCode).to.equal(200);
+                done();
+            });
+        });
+
+        it("Palauttaa tasan kolme peliä", function (done) {
+            request.get(url, function (error, response, body) {
+                expect(JSON.parse(body).length).to.equal(3);
+                done();
+            });
+        });
+
+    });
+
+});
+
+
+
+
+describe("GET - getGameById", function () {
+
+    let url = apiUrl + "getGameById/"
+
+    describe("Palauttaa peli_1 tiedot", function () {
+        it("Palauttaa statuskoodin 200 OK", function (done) {
+            request.get(url + peli_1.game_id, function (error, response, body) {
+                expect(response.statusCode).to.equal(200);
+                done();
+            });
+        });
+
+        it("Palauttaa oikean id:n", function (done) {
+            request.get(url + peli_1.game_id, function (error, response, body) {
+                expect(JSON.parse(body)[0]._id).to.equal(peli_1.game_id);
+                done();
+            });
+        });
+
+        it("Palauttaa oikean nimen", function (done) {
+            request.get(url + peli_1.game_id, function (error, response, body) {
+                expect(JSON.parse(body)[0].peli_nimi).to.equal("Blinkenlights - Mocha Explosion");
+                done();
+            });
+        });
+    });
+
+    describe("Palauttaa statuskoodin 404 Not Found (id:tä ei ole olemassa)", function () {
+        it("Palauttaa statuskoodin 404 Not Found", function (done) {
+            let testi_id = ObjectId.ObjectID();
+            request.get(url + testi_id, function (error, response, body) {
+                expect(response.statusCode).to.equal(404);
+                done();
+            });
+        });
+
+        it("Palauttaa virheen(id muodollisesti virheellinen)", function (done) {
+            request.get(url + "abc123", function (error, response, body) {
+                expect(response.statusCode).to.equal(400);
+                done();
+            });
+        });
+    });
 });
