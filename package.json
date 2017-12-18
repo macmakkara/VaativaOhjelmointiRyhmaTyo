@@ -19,6 +19,6 @@
     "start": "node main.js",
     "test": "mocha --timeout 5000 --exit"
   },
-  "author": "JR",
+  "author": "JR ja JS",
   "license": "ISC"
 }
