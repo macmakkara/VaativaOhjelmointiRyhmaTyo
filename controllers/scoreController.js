@@ -5,10 +5,10 @@ const ObjectId = require('mongodb').ObjectID;
 
 module.exports = {
 
-    //Hakee kaikkien pelien kaikki pisteet (lähinnä debug)
     getAllScores: function (req, res) {
 
         db_controller.getAllScores((virhe, vastaus) => {
+            if (virhe) throw virhe;
 
             if (virhe) {
                 res.status(500).json(virhe);
@@ -58,6 +58,7 @@ module.exports = {
     },
 
     //Hakee tietyn pelaajan kaikkien pelien pisteet käyttäjänimen perusteella, järjestää parhaimman mukaan.
+    //Optional parametrina voi antaa pelaajanimen lisäksi game_id:n, jos haluaa tietyn pelaajan ja tietyn pelin pisteet
     getPlayerScore: function (req, res) {
 
         db_controller.findPlayerByName(req.params.playername, (virhe_findPlayerByName, vastaus_findPlayerByName) => {
@@ -69,29 +70,36 @@ module.exports = {
                 res.status(404).json("Pelaajaa ei ole olemassa!");
 
             } else {
+
                 if (req.params.game_id) {
+
                     if (!ObjectId.isValid(req.params.game_id)) {
+
                         res.status(400).json("game_id ei ole muodollisesti oikea!")
                         return; //Horrible hack, jotta ei herjaa "cant set headers after they are sent"
+
                     }
                 }
 
                 db_controller.getPlayerScore(req.params.playername, req.params.game_id, (virhe, vastaus) => {
 
                     if (virhe) {
+
                         res.status(500).json("Tapahtui virhe haettaessa pelaajan:" + req.params.playername + "pisteitä. Yritä hetken kuluttua uudelleen. Virhe:" + +virhe);
+
                     } else {
 
-                        vastaus.sort(function (a, b) {
-                            return parseFloat(b.score) - parseFloat(a.score);
-                        });
+                        vastaus.sort(function (a, b) { return parseFloat(b.score) - parseFloat(a.score); });
 
                         res.status(200).json(vastaus);
                     }
+
                 });
 
             }
+
         });
+
     },
 
     //Lisää tietyn pelaajan pisteet kantaan
@@ -104,6 +112,7 @@ module.exports = {
         "gametoken":(autentikointitoken, jotta kuka tahansa ei voi puskea dataa kantaan)
     }
     */
+    
     addPlayerScore: function (req, res) {
 
         let pisteet = {
@@ -135,12 +144,21 @@ module.exports = {
                 db_controller.postPlayerScore(pisteet, (virhe, vastaus) => {
 
                     if (virhe) {
+
                         res.status(400).json("Tapahtui virhe lisättäessä pisteitä: " + virhe);
+
                     } else {
+
                         res.status(200).json("Pisteet lisätty onnistuneesti");
+
                     }
+
                 });
+
             }
+
         }
+
     }
+
 };
