@@ -16,7 +16,7 @@ router.route('/emptyDatabase').get(testController.emptyDatabase);
 /* Public puoli */
 router.route('/getallscores').get(scoreController.getAllScores);
 router.route('/getgamescore/:game_id').get(scoreController.getGameScore);
-router.route('/getplayerscore/:playername').get(scoreController.getPlayerScore);
+router.route('/getplayerscore/:playername/:game_id?').get(scoreController.getPlayerScore);
 router.route('/getGameList').get(gameController.getGameList);
 router.route('/getGameById/:game_id').get(gameController.findGameById);
 
