@@ -29,18 +29,3 @@ app.use('/api/', routes); //Kaikki apin pyynnöt ohjataan routesiin
 app.listen(config_server.portti, () => {
     console.log("Palvelin käynnistyi porttiin " + config_server.portti);
 });
-
-
-
-//TODO: HTTPS
-/*
-https.createServer(options, app, (req, res) => {
-
-}).listen(https_portti, () => {
-
-    console.log("Palvelin käynnistyi porttiin " + https_portti);
-
-    //scheduled_operations.kaynnistaAjoitetutTehtavat(); //Palvelimen käynnistyksessä aloitetaan ajoitettujen tehtävien ajaminen
-
-});
-*/
