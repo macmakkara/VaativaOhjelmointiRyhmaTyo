@@ -61,8 +61,8 @@ module.exports = {
     },
 
     getGameScore: (game_id, callback) => {
-
-        db.collection("scores").find({ "game_id": game_id }, { "gametoken": 0 }).toArray((virhe, rivit) => {
+        console.log("getGamescore")
+        db.collection("scores").find({ game_id: game_id }, {"_id": 0, "gametoken": 0}).toArray((virhe, rivit) => {
 
             if (virhe) throw virhe;
 
@@ -86,7 +86,7 @@ module.exports = {
             };
         }
 
-        db.collection("scores").find(queryObject).toArray((virhe, rivit) => {
+        db.collection("scores").find(queryObject, {"_id": 0, "gametoken": 0}).toArray((virhe, rivit) => {
 
             if (virhe) throw virhe;
 
