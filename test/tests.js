@@ -529,6 +529,35 @@ describe("INTEGRATION", function () {
             }); 
         });
 
+        it("Palauttaa statuskoodin 200 OK (pelaajan 1 pisteet pelistä 1)", function (done) {
+            request.get(url + pistedata_1.player +"/"+ peli_1.game_id, function (error, response, body) {
+                expect(response.statusCode).to.equal(200);
+                done();
+            });
+        });
+
+        it("Palauttaa pelaajan 1 pisteet pelistä 1 (2 kenttää)", function (done) {
+            request.get(url + pistedata_1.player +"/"+ peli_1.game_id, function (error, response, body) {
+                expect(JSON.parse(body).length).to.equal(2);
+                done();
+            });
+        });
+
+        it("Palauttaa pelaajan 1 pisteet pelistä 2 (1 kenttä)", function (done) {
+            request.get(url + pistedata_1.player +"/"+ peli_2.game_id, function (error, response, body) {
+                expect(JSON.parse(body).length).to.equal(1);
+                done();
+            });
+        });
+
+        it("Palauttaa statuskoodin 400 (pelaaja oikein, game_id muodollisesti väärin)", function (done) {
+            request.get(url + pistedata_1.player +"/abc123", function (error, response, body) {
+                console.log(body);
+                expect(response.statusCode).to.equal(400);
+                done();
+            });
+        });
+
         describe("Palauttaa 404 (pelaajaa ei ole olemassa)", function () {
             it("Palauttaa statuskoodin 404 Not Found", function (done) {
                 request.get(url + "MochaMasterTheTestKiller", function (error, response, body) {
