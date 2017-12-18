@@ -4,7 +4,7 @@ const db_controller = require("./db_controller");
 module.exports = {
     //TODO: Callback helvetin välttämiseksi pitäisi varmaan siirtyä promisen käyttöön.
 
-    //lähettää uuden pelin kantaan, palauttaa kyseisen pelin id:n (ns. gametoken jota pelintekijä voi hyödyntää)
+    //lähettää uuden pelin kantaan, palauttaa lisätyn pelin tiedot, jolla lisätä pisteitä.
     addGame: function (req, res) {
         //console.log("addGame:");
         //console.log(req.body);
@@ -14,7 +14,7 @@ module.exports = {
 
          } else {
 
-            //Tarkistetaan onko peli jo kannassa
+            //Tarkistetaan onko samanniminen peli jo kannassa
             db_controller.findGameByName(req.body.peli_nimi, (virhe, vastaus) => {
 
                 if (virhe) {
@@ -37,8 +37,14 @@ module.exports = {
                             if (virhe) {
                                 res.status(500).json("Tapahtui virhe lisättäessä peliä. Virhe: " + virhe);
                             } else {
-                                //palauttaa tuon aiemmin tehdyn tokenin
-                                res.status(200).json(uusipeli.gametoken);
+
+                               
+                                let authData = {
+                                    "game_id":vastaus.ops[0]._id,
+                                    "gametoken": vastaus.ops[0].gametoken
+                                };
+                                
+                                res.status(200).json(authData);
                             }
 
                         })
