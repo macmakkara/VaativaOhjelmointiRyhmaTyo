@@ -16,6 +16,7 @@ before(done => {
     console.log("---------------------------------------");
     console.log(apiUrl)
 
+    
     palvelin.listen(serverConfig.portti, done());
 
 });
@@ -383,13 +384,12 @@ describe("POST - addPlayerScore", function () {
     });
 
     describe("Pisteiden lisäys peliin " + peli_1.peli_nimi + ": pistemäärä string", function () {
-        it("Palauttaa statuskoodin 400 Bad Request", function (done) {
+        it("Palauttaa statuskoodin 200 OK", function (done) {
             pistedata_1.game_id = peli_1.game_id;
             pistedata_1.gametoken = peli_1.gametoken;
             pistedata_1.score = "9001";
 
             request.post(url, { json: pistedata_1 }, function (error, response, body) {
-                console.log(body);
                 expect(response.statusCode).to.equal(200);
                 done();
             });
