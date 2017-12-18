@@ -5,17 +5,13 @@ module.exports = {
 
     testconnection: function (req, res) {
         //Tätä voi käyttää clientin puolella testaamaan, onko palvelin käynnissä. Lähinnä sanitycheck tarkoituksissa
-        //console.log("yhteyttä testataan osoitteesta:" + req.hostname);
         res.status(200).json("Palvelin on toiminnassa");
     },
 
     //Debug palikka kannan tyhjentämiseen testidatasta. 
     deleteAllScores: function (req, res) {
-        console.log("deleteAllScores");
-
         db_controller.deleteAllScores((virhe, vastaus) => {
-            console.log(virhe);
-            console.log(vastaus);
+            if (virhe) throw virhe;
 
             if (virhe) {
                 res.status(500).json("Tapahtui virhe tyhjentäessä pistedataa: " + virhe);
@@ -26,11 +22,8 @@ module.exports = {
     },
 
     deleteAllGames: function (req, res) {
-        console.log("deleteAllGames");
-
         db_controller.deleteAllGames((virhe, vastaus) => {
-            console.log(virhe);
-            console.log(vastaus);
+            if (virhe) throw virhe;
 
             if (virhe) {
                 res.status(500).json("Tapahtui virhe tyhjentäessä pelidataa: " + virhe);
@@ -41,10 +34,8 @@ module.exports = {
     },
 
     emptyDatabase: function (req, res) {
-        console.log("emptyDatabase");
-
         db_controller.emptyDatabase((virhe, vastaus) => {
-
+            if (virhe) throw virhe;
 
             if (virhe) {
                 res.status(500).json("Tapahtui virhe tyhjentäessä kantaa: " + virhe);
@@ -52,10 +43,5 @@ module.exports = {
                 res.status(200).json("Kanta tyhjennetty onnistuneesti");
             }
         });
-    },
-
-
-
-
-
+    }
 };
