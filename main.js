@@ -1,8 +1,6 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const fs = require("fs");
-const moment = require("moment");
 
 const routes = require('./routes/routes'); //Sisältää kaikki urlit
 const db_controller = require("./controllers/db_controller");
@@ -15,12 +13,9 @@ app.locals.pretty = true;
 
 
 app.use((req, res, next) => {
-    //console.log("app.use!");
-    //console.log(req.body);
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With,Content-Type, Accept");
-
     next();
 });
 
