@@ -33,7 +33,7 @@ main.controller("mainController", function ($scope, $http, $interval, $timeout, 
             $scope.mockPisteet = {
                 "player": vastaus.player,
                 "score": vastaus.score,
-                "game_id":$scope.mockPisteet.game_id,
+                "game_id": $scope.mockPisteet.game_id,
                 "gametoken": $scope.mockPisteet.gametoken,
             };
 
@@ -51,117 +51,106 @@ main.controller("mainController", function ($scope, $http, $interval, $timeout, 
             });
         };
 
-        //Lähettää pistedataa scoresiin
-        $scope.lahetaPisteet = function (pistedata) {
-            db_service.lahetaPisteet(pistedata).then(function (vastaus) {
+    //Lähettää pistedataa scoresiin
+    $scope.lahetaPisteet = function (pistedata) {
+        db_service.lahetaPisteet(pistedata).then(function (vastaus) {
 
-                if (vastaus.status == 200) {
-                    $scope.luoViesti(vastaus, "Pisteet lähetetty onnistuneesti")
-                } else {
-                    $scope.luoViesti(vastaus, vastaus.data);
-                }
-
-            });
-        };
-
-        //Lähettää pelin gamesiin
-        $scope.lahetaPeli = function (pelidata) {
-
-            db_service.uusiPeli(pelidata).then(function (vastaus) {
-                if (vastaus.status == 200) {
-                    $scope.pelitoken = vastaus.data;
-                    $scope.luoViesti(vastaus, "Peli lisätty onnistuneesti")
-                } else {
-                    $scope.luoViesti(vastaus, vastaus.data);
-                }
-            });
-        };
-
-
-
-        $scope.tyhjennaPisteet = function () {
-
-            mockdataService.tyhjennaPisteet().then(function (vastaus) {
-                if (vastaus.status == 200) {
-                    $scope.luoViesti(vastaus, "Pisteet tyhjennetty onnistuneesti")
-                } else {
-                    $scope.luoViesti(vastaus, vastaus.data);
-                }
-            });
-        };
-
-        $scope.tyhjennaKanta = function () {
-
-            mockdataService.tyhjennaKanta().then(function (vastaus) {
-                if (vastaus.status == 200) {
-                    $scope.luoViesti(vastaus, "Kanta tyhjennetty onnistuneesti")
-                } else {
-                    $scope.luoViesti(vastaus, vastaus.data);
-                }
-            });
-        };
-
-
-        $scope.haeKaikkiPelit = function () {
-
-            db_service.haePelit().then(function (vastaus) {
-
-                if (vastaus.status == 200) {
-                    $scope.pelilista = vastaus.data;
-                    $scope.valittuPeli = vastaus.data[0];
-
-                } else {
-                    $scope.luoViesti(vastaus, vastaus.data);
-                }
-
-            });
-        };
-
-        $scope.haePelinPisteet = function (peli_id) {
-
-            return db_service.haePelinPisteet(peli_id).then(function (vastaus) {
-                if (vastaus.status == 200) {
-                    return vastaus.data;
-                } else {
-                    $scope.luoViesti(vastaus, vastaus.data);
-                }
-            });
-        };
-
-
-
-        $scope.init = function () {
-            $scope.LuoMockPisteet();
-            $scope.haeKaikkienPelienPisteet();
-            $scope.haeKaikkiPelit();
-
-        };
-
-
-        $scope.init();
-
-
-        $scope.naytaViesti = function () {
-            console.log("GROWL");
-            console.log(growl);
-            growl.warning('This is warning message.', { title: 'Warning!' });
-            growl.error('This is error message.', { title: 'Error!' });
-            growl.success('This is success message.', { title: 'Success!' });
-            growl.info('This is an info message.', { title: 'Info!' });
-        }
-
-
-
-        $scope.luoViesti = function (response, viesti) {
-
-            if (response.status == 200) {
-                growl.success(viesti, { title: 'Toiminto onnistui' });
+            if (vastaus.status == 200) {
+                $scope.luoViesti(vastaus, "Pisteet lähetetty onnistuneesti")
             } else {
-                growl.error(viesti, { title: 'Tapahtui virhe!' });
+                $scope.luoViesti(vastaus, vastaus.data);
             }
-        };
+
+        });
+    };
+
+    //Lähettää pelin gamesiin
+    $scope.lahetaPeli = function (pelidata) {
+
+        db_service.uusiPeli(pelidata).then(function (vastaus) {
+            if (vastaus.status == 200) {
+                $scope.pelitoken = vastaus.data;
+                $scope.luoViesti(vastaus, "Peli lisätty onnistuneesti")
+            } else {
+                $scope.luoViesti(vastaus, vastaus.data);
+            }
+        });
+    };
 
 
-    });
+
+    $scope.tyhjennaPisteet = function () {
+
+        mockdataService.tyhjennaPisteet().then(function (vastaus) {
+            if (vastaus.status == 200) {
+                $scope.luoViesti(vastaus, "Pisteet tyhjennetty onnistuneesti")
+            } else {
+                $scope.luoViesti(vastaus, vastaus.data);
+            }
+        });
+    };
+
+    $scope.tyhjennaKanta = function () {
+
+        mockdataService.tyhjennaKanta().then(function (vastaus) {
+            if (vastaus.status == 200) {
+                $scope.luoViesti(vastaus, "Kanta tyhjennetty onnistuneesti")
+            } else {
+                $scope.luoViesti(vastaus, vastaus.data);
+            }
+        });
+    };
+
+
+    $scope.haeKaikkiPelit = function () {
+
+        db_service.haePelit().then(function (vastaus) {
+
+            if (vastaus.status == 200) {
+                $scope.pelilista = vastaus.data;
+                $scope.valittuPeli = vastaus.data[0];
+
+            } else {
+                $scope.luoViesti(vastaus, vastaus.data);
+            }
+
+        });
+    };
+
+    $scope.haePelinPisteet = function (peli_id) {
+
+        return db_service.haePelinPisteet(peli_id).then(function (vastaus) {
+            if (vastaus.status == 200) {
+                return vastaus.data;
+            } else {
+                $scope.luoViesti(vastaus, vastaus.data);
+            }
+        });
+    };
+
+
+
+    $scope.init = function () {
+        $scope.LuoMockPisteet();
+        $scope.haeKaikkienPelienPisteet();
+        $scope.haeKaikkiPelit();
+
+    };
+
+
+    $scope.init();
+
+
+    $scope.luoViesti = function (response, viesti) {
+
+        if (response.status == 200) {
+            growl.success(viesti, { title: 'Toiminto onnistui' });
+        } else {
+            growl.error(viesti, { title: 'Tapahtui virhe!' });
+        }
+    };
+
+
+});
 
 
