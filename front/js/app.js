@@ -1,5 +1,5 @@
 var main = angular.module("main", ['angular-growl', 'ngAnimate']);
-var apiUrl = "http://seiz.in:8080/api/";
+var apiUrl = "http://localhost:3333/api/";
 
 
 main.config(['growlProvider', function (growlProvider) {
