@@ -1,3 +1,4 @@
+
 const moment = require("moment");
 const mongodb = require("mongodb");
 const mongoClient = mongodb.MongoClient;
@@ -62,7 +63,7 @@ module.exports = {
 
     getGameScore: (game_id, callback) => {
         console.log("getGamescore")
-        db.collection("scores").find({ game_id: game_id }, {"_id": 0, "gametoken": 0}).toArray((virhe, rivit) => {
+        db.collection("scores").find({ game_id: game_id }).project({game_id: 0, _id:0,gametoken:0}).toArray((virhe, rivit) => {
 
             if (virhe) throw virhe;
 
